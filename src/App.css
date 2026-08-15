@@ -414,15 +414,59 @@ footer {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 3rem;
+  .navbar {
+    flex-direction: column;
+    padding: 15px;
+    height: auto;
+    gap: 15px;
   }
-  
+
   .nav-links {
-    display: none; /* simple hidden for mobile for now, can be expanded later */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    font-size: 0.9rem;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
   }
   
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .project-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .project-links button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .experience-card, .skill-card, .project-card {
+    padding: 20px;
+  }
+
+  .email-toast {
+    width: 90%;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+  
+  .social-links {
+    gap: 20px;
   }
 }
