@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Tableau de Bord - BDANOW</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #1E3A8A;
+            --secondary-color: #3B82F6;
+            --accent-color: #60A5FA;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --light-color: #F8FAFC;
+            --light-bg: #FFFFFF;
+            --dark-bg: #0F172A;
+            --text-color: #1E293B;
+            --text-light: #64748B;
+            --border-color: #E2E8F0;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--light-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        .user-info {
+            z-index: 1;
+            position: relative;
+        }
+        
+        .user-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .user-info p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            position: relative;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Navigation */
+        .dashboard-nav {
+            background: var(--light-bg);
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-item {
+            padding: 20px 0;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            background: var(--light-color);
+        }
+        
+        .stat-card {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        }
+        
+        .stat-icon.green {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+        
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+        }
+        
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        /* Main Content */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        /* Courses Progress */
+        .courses-section {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .course-progress-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .course-progress-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .course-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .course-progress-value {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .course-progress-bar {
+            height: 10px;
+            background: var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .course-progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            position: relative;
+            transition: width 1s ease;
+        }
+        
+        .course-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 100%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .sidebar-card {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Upcoming Deadlines */
+        .deadline-item {
+            padding: 15px;
+            background: var(--light-color);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .deadline-item.urgent {
+            border-left-color: var(--danger-color);
+        }
+        
+        .deadline-date {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--warning-color);
+        }
+        
+        .deadline-item.urgent .deadline-date {
+            color: var(--danger-color);
+        }
+        
+        .deadline-course {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        
+        .deadline-time {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Recent Activity */
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+        
+        .activity-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        
+        .activity-details p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .achievement-item {
+            text-align: center;
+            padding: 20px;
+            background: var(--light-color);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+        
+        .achievement-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--warning-color), #D97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .achievement-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+        }
+        
+        .action-btn.secondary {
+            background: var(--light-color);
+            color: var(--text-color);
+        }
+        
+        .action-btn.secondary:hover {
+            background: var(--border-color);
+        }
+        
+        /* Footer */
+        .dashboard-footer {
+            background: var(--light-color);
+            padding: 30px 40px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Back Button */
+        .back-to-home {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            color: var(--primary-color);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        
+        .back-to-home:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .dashboard-nav {
+                overflow-x: auto;
+                padding: 0 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 20px;
+            }
+            
+            .dashboard-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="user-info">
+                <h1>Bonjour, Ahmed Alami ! </h1>
+                <p>Votre tableau de bord de progression des formations</p>
+                <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center;">
+                    <span style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">
+                        <i class="fas fa-medal"></i> Étudiant Premium
+                    </span>
+                    <span style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">
+                        <i class="fas fa-fire"></i> Série de 12 jours
+                    </span>
+                </div>
+            </div>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Ahmed+Alami&background=1E3A8A&color=fff&size=200&bold=true" alt="Ahmed Alami">
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i> Tableau de bord
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-book-open"></i> Mes formations
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-certificate"></i> Certificats
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i> Statistiques
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i> Paramètres
+            </a>
+        </nav>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>5</h3>
+                    <p>Formations suivies</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>142</h3>
+                    <p>Heures de formation</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Certificats obtenus</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>78%</h3>
+                    <p>Progression moyenne</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Left Column - Courses Progress -->
+            <div class="courses-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i> Progression des formations
+                </h2>
+                
+                <div class="course-progress-item">
+                    <div class="course-header">
+                        <h3 class="course-title">Développeur Full Stack</h3>
+                        <span class="course-progress-value">92%</span>
+                    </div>
+                    <div class="course-progress-bar">
+                        <div class="course-progress-fill" style="width: 92%"></div>
+                    </div>
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 42h / 60h</span>
+                        <span><i class="far fa-calendar"></i> Dernière session: Aujourd'hui</span>
+                    </div>
+                </div>
+                
+                <div class="course-progress-item">
+                    <div class="course-header">
+                        <h3 class="course-title">Data Science & Machine Learning</h3>
+                        <span class="course-progress-value">65%</span>
+                    </div>
+                    <div class="course-progress-bar">
+                        <div class="course-progress-fill" style="width: 65%"></div>
+                    </div>
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 52h / 80h</span>
+                        <span><i class="far fa-calendar"></i> Dernière session: Hier</span>
+                    </div>
+                </div>
+                
+                <div class="course-progress-item">
+                    <div class="course-header">
+                        <h3 class="course-title">Marketing Digital Avancé</h3>
+                        <span class="course-progress-value">45%</span>
+                    </div>
+                    <div class="course-progress-bar">
+                        <div class="course-progress-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 20h / 45h</span>
+                        <span><i class="far fa-calendar"></i> Dernière session: 2 jours</span>
+                    </div>
+                </div>
+                
+                <div class="course-progress-item">
+                    <div class="course-header">
+                        <h3 class="course-title">Cybersécurité Fondamentale</h3>
+                        <span class="course-progress-value">30%</span>
+                    </div>
+                    <div class="course-progress-bar">
+                        <div class="course-progress-fill" style="width: 30%"></div>
+                    </div>
+                    <div class="course-meta">
+                        <span><i class="far fa-clock"></i> 21h / 70h</span>
+                        <span><i class="far fa-calendar"></i> Dernière session: 5 jours</span>
+                    </div>
+                </div>
+                
+                <div class="course-progress-item">
+                    <div class="course-header">
+                        <h3 class="course-title">UI/UX Design Professionnel</h3>
+                        <span class="course-progress-value">100%</span>
+                    </div>
+                    <div class="course-progress-bar">
+                        <div class="course-progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--success-color), #059669);"></div>
+                    </div>
+                    <div class="course-meta">
+                        <span><i class="fas fa-trophy" style="color: var(--success-color);"></i> Terminé le 15/02/2025</span>
+                        <span><i class="fas fa-certificate" style="color: var(--warning-color);"></i> Certificat obtenu</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <i class="fas fa-play-circle"></i> Continuer l'apprentissage
+                    </button>
+                    <button class="action-btn secondary">
+                        <i class="fas fa-search"></i> Trouver une nouvelle formation
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Right Column - Sidebar -->
+            <div class="sidebar">
+                <!-- Upcoming Deadlines -->
+                <div class="sidebar-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-calendar-alt"></i> Prochaines échéances
+                    </h2>
+                    
+                    <div class="deadline-item urgent">
+                        <div class="deadline-date">15 Mars 2025</div>
+                        <div class="deadline-course">Projet final - Développeur Full Stack</div>
+                        <div class="deadline-time"><i class="far fa-clock"></i> Dans 3 jours</div>
+                    </div>
+                    
+                    <div class="deadline-item">
+                        <div class="deadline-date">25 Mars 2025</div>
+                        <div class="deadline-course">Examen Data Science</div>
+                        <div class="deadline-time"><i class="far fa-clock"></i> Dans 13 jours</div>
+                    </div>
+                    
+                    <div class="deadline-item">
+                        <div class="deadline-date">10 Avril 2025</div>
+                        <div class="deadline-course">Soumission projet Marketing</div>
+                        <div class="deadline-time"><i class="far fa-clock"></i> Dans 29 jours</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="sidebar-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i> Activité récente
+                    </h2>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h4>Formation Full Stack</h4>
+                            <p>Module 7 terminé • Aujourd'hui 14:30</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h4>Quiz réussi</h4>
+                            <p>Data Science Quiz • Score: 92% • Hier</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h4>Certificat obtenu</h4>
+                            <p>UI/UX Design • 2 jours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h4>Commentaire posté</h4>
+                            <p>Forum Marketing • 3 jours</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Achievements -->
+                <div class="sidebar-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-trophy"></i> Réalisations
+                    </h2>
+                    
+                    <div class="achievements-grid">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="achievement-title">Débutant rapide</div>
+                            <div class="achievement-desc">Premier cours terminé</div>
+                        </div>
+                        
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="achievement-title">Série de 10 jours</div>
+                            <div class="achievement-desc">Apprentissage continu</div>
+                        </div>
+                        
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="achievement-title">Quiz Master</div>
+                            <div class="achievement-desc">5 quiz à 100%</div>
+                        </div>
+                        
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="achievement-title">Community Helper</div>
+                            <div class="achievement-desc">50 commentaires</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="dashboard-footer">
+            <div class="footer-info">
+                <p style="color: var(--text-light); font-size: 0.9rem;">
+                    <i class="fas fa-sync-alt"></i> Dernière mise à jour: Aujourd'hui 15:42
+                </p>
+            </div>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> Aide</a>
+                <a href="#"><i class="fas fa-download"></i> Exporter données</a>
+                <a href="#"><i class="fas fa-print"></i> Imprimer</a>
+                <a href="#" style="color: var(--danger-color);">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Animation for progress bars
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress bars on load
+            const progressBars = document.querySelectorAll('.course-progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+            
+            // Add click events to action buttons
+            document.querySelectorAll('.action-btn.primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Redirection vers la formation en cours...');
+                });
+            });
+            
+            document.querySelectorAll('.action-btn.secondary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Ouverture du catalogue des formations...');
+                });
+            });
+            
+            // Navigation item clicks
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show simple alert for demo
+                    const text = this.textContent.trim();
+                    if (!text.includes('Tableau')) {
+                        alert(`Navigation vers: ${text}`);
+                    }
+                });
+            });
+            
+            // Logout button
+            document.querySelector('a[href="#"]:last-child').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                    alert('Déconnexion réussie. Redirection vers la page d\'accueil...');
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

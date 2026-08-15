@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDANOW - Plateforme de Formation Professionnelle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+    </div>
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-button" id="chatButton">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-header">
+                <h4><i class="fas fa-headset"></i> Support BDANOW</h4>
+                <button class="chat-close" id="chatClose">&times;</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Bonjour ! Je suis Aya, votre assistante BDANOW. Comment puis-je vous aider aujourd'hui ?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Tapez votre message...">
+                <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="Smart (1).png" alt="BDANOW Logo">
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="active" data-page="home">Accueil</a></li>
+                    <li><a href="#courses" data-page="courses">Formations</a></li>
+                    <li><a href="#events" data-page="events">Événements</a></li>
+                    <li><a href="#testimonials" data-page="testimonials">Témoignages</a></li>
+                    <li><a href="#dashboard" data-page="dashboard" id="dashboardLink">Tableau de bord</a></li>
+                    <li><a href="#contact" data-page="contact">Contact</a></li>
+                </ul>
+                <div class="nav-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Rechercher une formation...">
+                    </div>
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-avatar" id="userAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="#dashboard" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
+                            <a href="#profile"><i class="fas fa-user-circle"></i> Mon profil</a>
+                            <a href="#settings"><i class="fas fa-cog"></i> Paramètres</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                        </div>
+                    </div>
+                    <div class="burger" id="burger">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">0,00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Payer maintenant</button>
+        </div>
+    </div>
+    <!-- Auth Modals -->
+    <div class="modal-overlay" id="authOverlay">
+        <div class="auth-modal">
+            <button class="close-modal" id="closeAuth">&times;</button>
+            <div class="auth-header">
+                <h2 id="authTitle">Connexion</h2>
+                <p>Accédez à votre espace personnel</p>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="loginTab">Connexion</div>
+                <div class="auth-tab" id="registerTab">Inscription</div>
+            </div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" placeholder="Votre mot de passe" required>
+                </div>
+                <button type="submit" class="btn-primary">Se connecter</button>
+            </form>
+            <form class="auth-form hidden" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Nom complet</label>
+                    <input type="text" id="registerName" placeholder="Votre nom et prénom" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Mot de passe</label>
+                    <input type="password" id="registerPassword" placeholder="Créez un mot de passe" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirm">Confirmer le mot de passe</label>
+                    <input type="password" id="registerConfirm" placeholder="Confirmez votre mot de passe" required>
+                </div>
+                <button type="submit" class="btn-primary">S'inscrire</button>
+            </form>
+            <div class="auth-footer">
+                <p>En vous inscrivant, vous acceptez nos <a href="#">Conditions d'utilisation</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Area -->
+    <main id="pageContent">
+        <!-- Home Page -->
+        <section class="page-content active" id="homePage">
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <h1 class="animate__animated animate__fadeInDown">Développez Votre Carrière avec <span style="color: var(--accent-color);">BDANOW</span></h1>
+                            <p class="animate__animated animate__fadeInUp animate__delay-1s">Transformez votre avenir professionnel. Expertise, accompagnement et formations de qualité pour réaliser vos ambitions.</p>
+                            <div class="hero-btns animate__animated animate__fadeInUp animate__delay-2s">
+                                <a href="#courses" class="btn-primary">Découvrir les formations</a>
+                                <a href="#testimonials" class="btn-outline">Voir les témoignages</a>
+                            </div>
+                        </div>
+                        <div class="hero-image animate__animated animate__fadeInRight animate__delay-1s">
+                            <img src="hero-bg.jpg" alt="NAVIGATE VOID EJITUDE">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section-padding" id="courses">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Formations Populaires</h2>
+                        <p>Découvrez nos programmes de certification pour booster votre carrière.</p>
+                    </div>
+                    <div class="courses-grid" id="featuredCourses">
+                        <!-- Courses will be loaded dynamically -->
+                    </div>
+                    <div class="text-center" style="margin-top: 50px;">
+                        <a href="#courses" data-page="courses" class="btn-accent" id="viewAllCourses">Voir toutes les formations</a>
+                    </div>
+                </div>
+            </section>
+            <!-- EVENTS SECTION ADDED HERE -->
+            <section class="section-padding events-section" id="events">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Événements à Venir</h2>
+                        <p>Découvrez nos événements et rencontres professionnelles</p>
+                    </div>
+                    <!-- Countdown for Moroccan CAN -->
+                    <div class="countdown-container fade-in">
+                        <div class="countdown-title">
+                            <i class="fas fa-trophy"></i>
+                            <span>CAN 2025 - Maroc</span>
+                            <div class="flag-icon"></div>
+                        </div>
+                        <div class="countdown-subtitle">
+                            Compte à rebours pour la finale de la Coupe d'Afrique des Nations 2025
+                        </div>
+                        <div class="countdown-timer" id="canCountdown">
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="days">00</div>
+                                <div class="countdown-label">Jours</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="hours">00</div>
+                                <div class="countdown-label">Heures</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="minutes">00</div>
+                                <div class="countdown-label">Minutes</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="seconds">00</div>
+                                <div class="countdown-label">Secondes</div>
+                            </div>
+                        </div>
+                        <div class="countdown-message" id="countdownMessage">
+                            La finale se jouera le 18 Janvier 2026 !
+                        </div>
+                    </div>
+                    <div class="events-grid" id="eventsGrid">
+                        <!-- Events will be loaded dynamically -->
+                    </div>
+                    <div class="text-center" style="margin-top: 50px;">
+                        <a href="#contact" data-page="contact" class="btn-primary">Proposer un événement</a>
+                    </div>
+                </div>
+            </section>
+            <section class="section-padding progress-section" id="progress">
+                <div class="container">
+                    <div class="progress-container">
+                        <div class="progress-image fade-in">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop" alt="Progression d'apprentissage">
+                        </div>
+                        <div class="progress-content">
+                            <h2 style="font-size: 2.5rem; margin-bottom: 30px;">Votre parcours vers la réussite</h2>
+                            <div class="progress-item fade-in">
+                                <div class="progress-info">
+                                    <span>Orientation Personnalisée</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="100"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item fade-in">
+                                <div class="progress-info">
+                                    <span>Formation Pratique</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item fade-in">
+                                <div class="progress-info">
+                                    <span>Techniques de Recherche</span>
+                                    <span>75%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item fade-in">
+                                <div class="progress-info">
+                                    <span>Insertion Professionnelle</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="90"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section-padding testimonials-section" id="testimonials">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Témoignages</h2>
+                        <p>Découvrez ce que disent nos apprenants</p>
+                    </div>
+                    <div class="testimonials-container">
+                        <div class="testimonial-slider">
+                            <div class="testimonial-track" id="testimonialTrack">
+                                <!-- Testimonials will be loaded dynamically -->
+                            </div>
+                        </div>
+                        <div class="testimonial-nav" id="testimonialNav">
+                            <!-- Dots will be added dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- Course Detail Page -->
+        <section class="page-content hidden" id="courseDetailPage">
+            <div class="container course-detail">
+                <div class="course-detail-header" id="courseDetailHeader">
+                    <!-- Course details will be loaded dynamically -->
+                </div>
+                <div class="course-tabs" id="courseTabs">
+                    <button class="course-tab active" data-tab="description">Description</button>
+                    <button class="course-tab" data-tab="curriculum">Curriculum</button>
+                    <button class="course-tab" data-tab="instructor">Instructeur</button>
+                    <button class="course-tab" data-tab="reviews">Avis</button>
+                </div>
+                <div class="course-tab-content">
+                    <div class="tab-pane active" id="descriptionTab">
+                        <h3>À propos de cette formation</h3>
+                        <p id="courseFullDescription"></p>
+                        <div class="course-carousel">
+                            <div class="carousel-track" id="courseCarouselTrack">
+                                <!-- Carousel slides will be loaded dynamically -->
+                            </div>
+                            <div class="carousel-nav" id="courseCarouselNav">
+                                <!-- Dots will be added dynamically -->
+                            </div>
+                        </div>
+                        <h3 style="margin-top: 40px;">Ce que vous apprendrez</h3>
+                        <div class="course-objectives" id="courseObjectives">
+                            <!-- Objectives will be loaded dynamically -->
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="curriculumTab">
+                        <h3>Curriculum du cours</h3>
+                        <div class="curriculum-list" id="curriculumList">
+                            <!-- Curriculum will be loaded dynamically -->
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="instructorTab">
+                        <h3>Votre instructeur</h3>
+                        <div class="instructor-info" id="instructorInfo">
+                            <!-- Instructor info will be loaded dynamically -->
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="reviewsTab">
+                        <h3>Avis des apprenants</h3>
+                        <div class="reviews-list" id="reviewsList">
+                            <!-- Reviews will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Dashboard Page -->
+        <section class="page-content dashboard hidden" id="dashboardPage">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div class="welcome-message">
+                        <h1>Bonjour, <span id="userName">Utilisateur</span></h1>
+                        <p>Voici votre progression et vos formations en cours</p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <a href="#courses" class="btn-primary" data-page="courses">Parcourir les formations</a>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="coursesCount">0</h3>
+                            <p>Formations suivies</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="hoursCount">0</h3>
+                            <p>Heures de formation</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="certificatesCount">0</h3>
+                            <p>Certificats obtenus</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="progressPercentage">0%</h3>
+                            <p>Progression moyenne</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-main">
+                        <div class="current-courses">
+                            <h2 style="margin-bottom: 30px;">Mes formations en cours</h2>
+                            <div id="userCourses">
+                                <!-- User courses will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-sidebar">
+                        <div class="sidebar-card">
+                            <h3>Prochaines échéances</h3>
+                            <div id="upcomingDeadlines">
+                                <p style="color: var(--text-light);">Aucune échéance prochaine</p>
+                            </div>
+                        </div>
+                        <div class="sidebar-card">
+                            <h3>Recommandations</h3>
+                            <div id="recommendations">
+                                <!-- Recommendations will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Courses Page -->
+        <section class="page-content hidden" id="coursesPage">
+            <section class="hero" style="padding-top: 120px; padding-bottom: 80px;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Toutes nos formations</h2>
+                        <p>Choisissez parmi notre catalogue complet de formations certifiantes</p>
+                    </div>
+                    <div class="courses-grid" id="allCoursesGrid">
+                        <!-- All courses will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- Events Page -->
+        <section class="page-content hidden" id="eventsPage">
+            <section class="section-padding" style="padding-top: 120px;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Tous nos Événements</h2>
+                        <p>Participez à nos événements professionnels et rencontres d'experts</p>
+                    </div>
+                    <div class="countdown-container" style="margin-bottom: 50px;">
+                        <div class="countdown-title">
+                            <i class="fas fa-trophy"></i>
+                            <span>CAN 2025 - Maroc</span>
+                            <div class="flag-icon"></div>
+                        </div>
+                        <div class="countdown-subtitle">
+                            Compte à rebours pour la finale de la Coupe d'Afrique des Nations 2025
+                        </div>
+                        <div class="countdown-timer" id="canCountdownPage">
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="daysPage">00</div>
+                                <div class="countdown-label">Jours</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="hoursPage">00</div>
+                                <div class="countdown-label">Heures</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="minutesPage">00</div>
+                                <div class="countdown-label">Minutes</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-value" id="secondsPage">00</div>
+                                <div class="countdown-label">Secondes</div>
+                            </div>
+                        </div>
+                        <div class="countdown-message">
+                            La finale se jouera le 18 Janvier 2026 !
+                        </div>
+                    </div>
+                    <div class="events-grid" id="allEventsGrid">
+                        <!-- All events will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- Contact Page -->
+        
+        <section class="page-content hidden" id="testimonialsPage">
+            <div class="section-padding" style="padding-top: 120px;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Témoignages</h2>
+                        <p>Découvrez ce que disent nos apprenants et lauréats de BDANOW</p>
+                    </div>
+                    
+                    <div class="courses-grid" id="allTestimonialsGrid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
+                        <!-- Testimonials will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-content hidden" id="contactPage">
+            <section class="section-padding" style="padding-top: 120px;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Contactez-nous</h2>
+                        <p>Nous sommes là pour répondre à toutes vos questions</p>
+                    </div>
+                    <div class="progress-container" style="align-items: flex-start;">
+                        <div class="progress-content">
+                            <h3 style="margin-bottom: 20px;">Envoyez-nous un message</h3>
+                            <form id="contactForm">
+                                <div class="form-group">
+                                    <label for="contactName">Nom complet</label>
+                                    <input type="text" id="contactName" placeholder="Votre nom et prénom" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email</label>
+                                    <input type="email" id="contactEmail" placeholder="votre@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactSubject">Sujet</label>
+                                    <input type="text" id="contactSubject" placeholder="Sujet de votre message" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactMessage">Message</label>
+                                    <textarea id="contactMessage" rows="5" placeholder="Votre message..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary">Envoyer le message</button>
+                            </form>
+                        </div>
+                        <div class="progress-image">
+                            <div class="card" style="padding: 30px;">
+                                <h3 style="margin-bottom: 20px;">Nos coordonnées</h3>
+                                <div style="display: flex; flex-direction: column; gap: 25px;">
+                                    <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                        <div style="width: 40px; height: 40px; background: var(--light-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Adresse</h4>
+                                            <p style="color: var(--text-light);">Technopark, Casablanca, Maroc</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                        <div style="width: 40px; height: 40px; background: var(--light-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Téléphone</h4>
+                                            <p style="color: var(--text-light);">+212 6 00 00 00 00</p>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                        <div style="width: 40px; height: 40px; background: var(--light-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div>
+                                            <h4>Email</h4>
+                                            <p style="color: var(--text-light);">contact@bdanow.ma</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="Smart (1).png" alt="BDANOW Logo">
+                        <h2>BDANOW</h2>
+                    </div>
+                    <p style="opacity: 0.9; margin-bottom: 20px;">Votre partenaire pour l'avenir professionnel. Nous offrons des programmes de formation spécialisés et un accompagnement personnalisé.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Liens rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home" data-page="home"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+                        <li><a href="#courses" data-page="courses"><i class="fas fa-chevron-right"></i> Formations</a></li>
+                        <li><a href="#events" data-page="events"><i class="fas fa-chevron-right"></i> Événements</a></li>
+                        <li><a href="#testimonials" data-page="testimonials"><i class="fas fa-chevron-right"></i> Témoignages</a></li>
+                        <li><a href="#contact" data-page="contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Ressources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Politique de confidentialité</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Newsletter</h3>
+                    <p style="opacity: 0.9; margin-bottom: 20px;">Abonnez-vous pour recevoir les dernières actualités et offres exclusives.</p>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="email" placeholder="Votre email" style="width: 100%; padding: 12px; border-radius: 5px; border: none;">
+                    </div>
+                    <button class="btn-accent" style="width: 100%;">S'abonner</button>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 BDANOW. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

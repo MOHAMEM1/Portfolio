@@ -1,0 +1,154 @@
+{
+  "translation": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "experience": "Experience",
+      "projects": "Projects",
+      "contact": "Contact"
+    },
+    "hero": {
+      "name": "Mohamed El Mahfoudi",
+      "degree": "Bachelor in Marketing & Digital Transformation at Mohammed V University",
+      "role": "Full Stack & Backend Web Developer (MERN Stack)",
+      "cta": "View My Work"
+    },
+    "about": {
+      "title": "About Me",
+      "description": "Full-Stack Developer & Versatile Profile with dual technical (Software Architecture, Mobile/Web) and strategic (Digital Marketing and Transformation) expertise. Capable of designing robust solutions (Monorepo, Fintech) while understanding business challenges. Rigorous, team-oriented, and adaptable, I am looking for new opportunities to bring innovative solutions.",
+      "skillsTitle": "Technical Skills",
+      "skills": {
+        "backend": {
+          "title": "Back-end, Data & AI",
+          "items": ["Python", "FastAPI", "Node.js", "Express", "PostgreSQL (Alembic)", "Redis", "AI Integration", "OCR (KYC)"]
+        },
+        "frontend": {
+          "title": "Front-end & Mobile",
+          "items": ["React Native (Expo)", "React.js", "TypeScript", "UI/UX (Reanimated 3, Tailwind)", "WebSockets"]
+        },
+        "devops": {
+          "title": "DevOps & Architecture",
+          "items": ["Git & GitHub", "Docker", "Monorepo Architecture", "Microservices", "RESTful APIs"]
+        },
+        "business": {
+          "title": "Business & Management",
+          "items": ["Digital Marketing Strategies", "Agile/Scrum", "E-commerce", "Fintech Ledger"]
+        }
+      }
+    },
+    "experience": {
+      "title": "Career: Experience & Education",
+      "jobsTitle": "Professional Experience",
+      "eduTitle": "Education & Certifications",
+      "jobs": [
+        {
+          "role": "Lead Full-Stack Developer (Paid Internship)",
+          "company": "FAMIB Group (Mali - Remote)",
+          "period": "March 2026 - August 2026 (6 months)",
+          "description": "Development of the core of a national neo-bank (Monorepo, FastAPI, PostgreSQL). Creation of a secure financial engine, Mobile App (React Native), and admin portal connected in real-time with OCR KYC integration."
+        },
+        {
+          "role": "Customer Service Agent & Branch Manager",
+          "company": "Cash Plus, Témara",
+          "period": "July 2025 - Nov. 2025 (5 months)",
+          "description": "Management of financial flows, national and international money transfers, account openings, and strict compliance with internal AML security procedures. Personalized advice to improve customer experience."
+        },
+        {
+          "role": "Salesperson (Garden Dept.)",
+          "company": "Mr. Bricolage, Témara",
+          "period": "April 2024 - Sept. 2024 (6 months)",
+          "description": "Customer advising and effective support while achieving ambitious sales goals through persuasion techniques and customer relationship management."
+        },
+        {
+          "role": "Sales Promoter",
+          "company": "Godwin Appliances (Carrefour)",
+          "period": "Dec. 2023 - Feb. 2024 (3 months)",
+          "description": "Welcoming, advising, and persuading customers. Development of sales and communication skills while ensuring excellent brand representation."
+        }
+      ],
+      "education": [
+        {
+          "degree": "Bachelor in Marketing and Digital Transformation",
+          "school": "Univ. Mohammed V (FSJES), Rabat",
+          "period": "September 2023 - August 2026",
+          "description": "Modules: E-Marketing, Artificial Intelligence, Business Intelligence, Big Data, Strategic Management, and Digital Project Management."
+        },
+        {
+          "degree": "Web Developer Certification (Full Stack MERN)",
+          "school": "Web4Jobs Center",
+          "period": "March 2025 - August 2026 (18 months)",
+          "description": "Intensive practice-oriented training: Responsive Web Design, Front-End (React, Redux), Back-End & APIs (Node.js, Express, MongoDB), and algorithmic challenges."
+        },
+        {
+          "degree": "ICT & Algorithms Certifications",
+          "school": "Huawei ICT Academy",
+          "period": "Sept. 2025 - Feb. 2026",
+          "description": "Official certifications: Overview of AI & Algorithms and Algorithm and Program Design."
+        },
+        {
+          "degree": "Personal Development & HR Training",
+          "school": "Wasl Wa Idmaj Foundation",
+          "period": "October 2023 - April 2024 (6 months)",
+          "description": "HR support workshops, personal development, and introduction to personal project launching."
+        },
+        {
+          "degree": "Baccalaureate in Physical Sciences (French Option)",
+          "school": "Nassim High School, Témara",
+          "period": "2022",
+          "description": "Obtained the baccalaureate in physical sciences."
+        }
+      ]
+    },
+    "projects": {
+      "title": "Featured Projects",
+      "xaalisi": {
+        "title": "Xaalisi - Financial Infrastructure & National Neo-Bank",
+        "role": "Lead Full-Stack Developer — XAALISI (Paid Internship - FAMIB Group)",
+        "description": "Design and development from scratch of a national neo-bank. As Lead Developer over a 6-month period, I architected and deployed a complete, secure, and scalable FinTech solution.<br/><br/><strong>Frontend & Mobile:</strong> Development of the Web administration interface and the cross-platform mobile application (React Native) with a conversion-optimized UX/UI.<br/><br/><strong>Backend & Core Banking:</strong> Implementation of a RESTful API (FastAPI) connected to PostgreSQL. Design of an ACID transaction engine preventing double-spending via idempotency keys.<br/><br/><strong>FinTech Features:</strong> Integration of multi-channel payments (USSD, Tontines, QR Code) and identity validation (KYC) using OCR technology.<br/><br/><strong>Ops & Architecture:</strong> Software lifecycle management via a Monorepo and Microservices architecture. Production deployment on a cloud server (Docker, Nginx, Let's Encrypt).",
+        "tags": ["Python", "FastAPI", "React Native", "PostgreSQL", "Docker", "Monorepo"],
+        "code": "View Code",
+        "live": "Website",
+        "qr": "Mobile App (APK)"
+      },
+      "bdanow": {
+        "title": "BDANOW - Centralized Web Platform",
+        "role": "Project Manager & Full-Stack Web Developer",
+        "description": "<strong>Academic Context</strong><br/>End-of-studies project carried out as part of my Bachelor's degree in Marketing & Digital Transformation at FSJES Souissi. Developed for the Digital Projects Management and Marketing module, under the supervision of Professor Mustapha ASBAI.<br/><br/><strong>The Project</strong><br/>BDANOW is a digital \"one-stop shop\" designed to solve the fragmentation of information in the Moroccan training market, directly connecting learners to training centers.<br/><br/><strong>My Role: Project Manager & Web Developer</strong><br/>Combining my hybrid profile (Marketing / Dev), I managed this project from A to Z:<br/>- Management & Strategy: Coordination of a 9-person team, drafting specifications, creating visual identity, and developing the marketing strategy.<br/>- Development: UI/UX design, front-end architecture programming, and platform deployment.",
+        "tags": ["HTML/CSS/JS", "Netlify", "Digital Marketing", "Project Management", "UI/UX"],
+        "code": "View Code",
+        "live": "View Platform"
+      },
+      "web4job": {
+        "title": "Web4Job Projects",
+        "role": "Full Stack Developer",
+        "description": "Collection of projects completed during my Full Stack development specialization at the Web4Jobs center. This intensive program allowed me to consolidate my technical skills on the MERN stack (MongoDB, Express, React, Node.js) through algorithmic challenges and real-world practical cases.",
+        "tags": ["MERN Stack", "JavaScript", "React"],
+        "code": "View Code"
+      },
+      "wordpress": {
+        "title": "Shop Digital - Digital Agency & E-commerce",
+        "role": "WordPress Developer",
+        "description": "<strong>Description:</strong><br/>End-to-end design and development of \"Shop Digital\", a hybrid website combining a digital agency showcase and an e-commerce solution (WooCommerce). This project was designed to offer a fluid user experience (UX) and optimize the conversion of online digital services.<br/><br/><strong>Key Features and Achievements:</strong><br/>- Development of a modern, responsive, and user-oriented interface.<br/>- Integration and configuration of an online store for selling e-services.<br/>- Implementation of dynamic contact forms for lead generation.<br/>- Overall optimization of the site to combine technical performance and digital marketing objectives.",
+        "tags": ["WordPress", "E-commerce", "Digital Marketing", "FSJES Souissi"],
+        "live": "View Certificate"
+      },
+      "indh": {
+        "title": "INDH Web Project (1st National Prize)",
+        "role": "Full Stack Developer (IMPACT Team)",
+        "description": "Full Stack design and development of an interactive web platform dedicated to celebrating the 20th anniversary of the INDH. This project, aimed at popularizing and guiding citizens towards social programs, was carried out as a team (IMPACT). Our collaborative and technical work was crowned with the 1st Prize at the national competition held in Témara under the supervision of Web4Jobs.",
+        "tags": ["Web Development", "Social Impact", "Teamwork", "Web4Jobs", "INDH"],
+        "live": "View Platform",
+        "code": "View Code"
+      }
+    },
+    "contact": {
+      "title": "Get In Touch",
+      "description": "I am currently looking for new professional opportunities. Whether it's a development project, a collaboration, or a simple question, don't hesitate to contact me. I will get back to you as soon as possible.",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "footer": {
+      "builtWith": "Designed & Built by Mohamed El Mahfoudi."
+    }
+  }
+}

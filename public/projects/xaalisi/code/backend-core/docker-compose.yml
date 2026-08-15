@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-xaalisi_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-xaalisi_strong_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-xaalisi_prod_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    restart: always
+    environment:
+      # Connection to postgres (the string contains the db service name "db")
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-xaalisi_admin}:${POSTGRES_PASSWORD:-xaalisi_strong_pass}@db:5432/${POSTGRES_DB:-xaalisi_prod_db}
+      - SECRET_KEY=${SECRET_KEY:-b71c26bdfdd285db6e11b33b003ba7f2bed7c5da12345678a1bc}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

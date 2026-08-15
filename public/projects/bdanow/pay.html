@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Paiement sécurisé BDANOW - Finalisez votre inscription à nos formations certifiantes.">
+    <title>BDANOW - Paiement Sécurisé</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://js.stripe.com">
+
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=MAD"></script>
+
+    <!-- Application Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/pay.css">
+</head>
+<body class="payment-body">
+    <!-- Header -->
+    <header class="payment-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="Smart (1).png" alt="BDANOW Logo">
+                <h1>BDANOW</h1>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Empty Cart Message -->
+        <div id="emptyCart" class="empty-cart hidden">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Votre panier est vide</h2>
+            <p>Il semble que vous n'avez pas sélectionné de formation. Veuillez retourner à la plateforme pour choisir vos cours.</p>
+            <a href="index.html" class="btn-primary" style="display:inline-flex">
+                <i class="fas fa-arrow-left" style="margin-right:var(--space-2)"></i>
+                Retour à l'accueil
+            </a>
+        </div>
+
+        <!-- Payment Content -->
+        <div id="paymentContent" class="hidden">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="payment-user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <h3 id="userName">Utilisateur</h3>
+                    <p id="userEmail">Chargement...</p>
+                </div>
+            </div>
+
+            <div class="payment-container">
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h2><i class="fas fa-receipt" style="color:var(--brand-600);margin-right:var(--space-3)"></i> Récapitulatif</h2>
+                    
+                    <div class="payment-cart-items" id="cartItems">
+                        <!-- Cart items loaded dynamically -->
+                    </div>
+                    
+                    <div class="payment-cart-total">
+                        <div class="total-row">
+                            <span>Sous-total:</span>
+                            <span id="subtotal">0,00 DH</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Frais de service:</span>
+                            <span id="serviceFee">0,00 DH</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Taxes (20%):</span>
+                            <span id="taxes">0,00 DH</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Total à payer:</span>
+                            <span id="totalAmount">0,00 DH</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h2><i class="fas fa-lock" style="color:var(--brand-600);margin-right:var(--space-3)"></i> Paiement</h2>
+                    
+                    <div class="method-tabs">
+                        <button class="method-tab active" data-method="credit-card">
+                            <i class="fas fa-credit-card"></i>
+                            Carte Bancaire
+                        </button>
+                        <button class="method-tab" data-method="paypal">
+                            <i class="fab fa-paypal"></i>
+                            PayPal
+                        </button>
+                    </div>
+
+                    <!-- Credit Card Form (Stripe) -->
+                    <div class="method-content active" id="credit-card-form">
+                        <form id="creditCardForm" onsubmit="event.preventDefault();">
+                            <div class="form-group" style="margin-bottom:var(--space-5)">
+                                <label style="display:block;margin-bottom:var(--space-2);font-weight:600">Numéro de carte</label>
+                                <div id="card-element">
+                                    <!-- Stripe element mounted here -->
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:var(--space-5)">
+                                <label for="cardName" style="display:block;margin-bottom:var(--space-2);font-weight:600">Nom sur la carte</label>
+                                <input type="text" 
+                                       id="cardName" 
+                                       class="form-control" 
+                                       placeholder="Ex: Ahmed Alami"
+                                       required
+                                       style="width:100%;padding:var(--space-3) var(--space-4);border:1px solid var(--border-color);border-radius:var(--radius-md)">
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PayPal Content -->
+                    <div class="method-content" id="paypal-form">
+                        <div id="paypal-button-container" style="min-height: 150px; display: flex; align-items: center; justify-content: center; background: var(--bg-body); border-radius: var(--radius-md); border: 1px dashed var(--border-color)">
+                            <!-- PayPal button rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <button id="payButton" class="btn-primary" style="width:100%;justify-content:center;padding:var(--space-4);font-size:var(--text-lg);margin-top:var(--space-6);background:var(--color-success)">
+                        <i class="fas fa-shield-check" style="margin-right:var(--space-2)"></i>
+                        <span id="payButtonText" style="margin-right:var(--space-2)">Payer</span>
+                        <span id="payButtonAmount">0,00 DH</span>
+                    </button>
+
+                    <!-- Security Info -->
+                    <div class="security-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Paiement 100% sécurisé • Données cryptées</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2>Paiement réussi !</h2>
+            <p>Votre inscription aux formations a été confirmée. Vous recevrez un email avec les détails d'accès.</p>
+            <p id="transactionId" style="font-family:monospace;background:var(--bg-body);padding:var(--space-3);border-radius:var(--radius-md);margin-bottom:var(--space-6)">Transaction: <strong>#TRX-000000</strong></p>
+            
+            <div style="display: flex; gap: var(--space-4); justify-content: center;">
+                <a href="index.html#dashboard" class="btn-primary">
+                    <i class="fas fa-tachometer-alt" style="margin-right:var(--space-2)"></i>
+                    Mon Tableau de bord
+                </a>
+                <button id="closeModal" class="btn-outline">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="payment-footer">
+        <div class="container">
+            <div class="payment-footer-content">
+                <div class="copyright">
+                    <p>&copy; 2025 BDANOW. Tous droits réservés.</p>
+                </div>
+                <div class="payment-secure">
+                    <i class="fas fa-lock"></i>
+                    <span>Paiement sécurisé par Stripe & PayPal</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Payment Scripts -->
+    <script src="js/pay.js"></script>
+</body>
+</html>

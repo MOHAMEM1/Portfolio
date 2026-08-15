@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INDH - Source Code Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; overflow: hidden; }
+    .top-bar { position: sticky; top: 0; z-index: 100; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+    .top-bar h1 { font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .top-bar .back-btn { padding: 8px 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #f8fafc; cursor: pointer; text-decoration: none; transition: all 0.2s; font-size: 0.85rem;}
+    .top-bar .back-btn:hover { background: rgba(255,255,255,0.1); }
+    .layout { display: flex; height: calc(100vh - 60px); }
+    .sidebar { width: 280px; min-width: 280px; background: #1e293b; border-right: 1px solid rgba(255,255,255,0.1); overflow-y: auto; padding: 15px 0; }
+    .sidebar-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #64748b; padding: 10px 20px 8px; font-weight: 600; }
+    .file-item { padding: 8px 20px 8px 30px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #cbd5e1; transition: all 0.15s; border-left: 3px solid transparent; }
+    .file-item:hover { background: rgba(255,255,255,0.05); color: #f8fafc; }
+    .file-item.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-left-color: #3b82f6; }
+    .file-icon { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .file-icon.html { background: #e44d26; }
+    .file-icon.js { background: #f7df1e; }
+    .file-icon.ts { background: #3178c6; }
+    .file-icon.css { background: #3b82f6; }
+    .file-icon.json { background: #8bc34a; }
+    .file-icon.default { background: #94a3b8; }
+    .file-meta { margin-left: auto; font-size: 0.65rem; color: #64748b; }
+    .folder-label { padding: 12px 20px 6px 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .code-area { flex: 1; overflow: auto; background: #0d1117; }
+    .code-header { position: sticky; top: 0; z-index: 10; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(8px); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+    .code-header .filename { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; }
+    pre { margin: 0; padding: 0; }
+    code.hljs { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; padding: 20px; background: transparent !important; }
+    .welcome-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #475569; gap: 15px; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="/" class="back-btn">← Portfolio</a>
+    <h1>INDH — Source Code</h1>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">Explorateur (Next.js)</div>
+      <div class="folder-label" style="padding-left: 20px">📁 app</div>
+      <div class="folder-label" style="padding-left: 30px">📁 about</div>
+      <div class="file-item" data-path="app/about/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">365 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 contact</div>
+      <div class="file-item" data-path="app/contact/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">239 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 documents</div>
+      <div class="file-item" data-path="app/documents/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">315 L</span>
+      </div>
+      <div class="file-item" data-path="app/globals.css" style="padding-left: 40px">
+        <span class="file-icon css"></span> globals.css
+        <span class="file-meta">335 L</span>
+      </div>
+      <div class="file-item" data-path="app/layout.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> layout.tsx
+        <span class="file-meta">51 L</span>
+      </div>
+      <div class="file-item" data-path="app/page.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">590 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 projects</div>
+      <div class="file-item" data-path="app/projects/loading.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> loading.tsx
+        <span class="file-meta">12 L</span>
+      </div>
+      <div class="file-item" data-path="app/projects/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">440 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 statistics</div>
+      <div class="file-item" data-path="app/statistics/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">228 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 submit</div>
+      <div class="file-item" data-path="app/submit/page.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> page.tsx
+        <span class="file-meta">393 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 components</div>
+      <div class="file-item" data-path="components/animated-counter.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> animated-counter.tsx
+        <span class="file-meta">87 L</span>
+      </div>
+      <div class="file-item" data-path="components/chatbot-button.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> chatbot-button.tsx
+        <span class="file-meta">61 L</span>
+      </div>
+      <div class="file-item" data-path="components/chatbot-dialog.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> chatbot-dialog.tsx
+        <span class="file-meta">214 L</span>
+      </div>
+      <div class="file-item" data-path="components/footer.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> footer.tsx
+        <span class="file-meta">172 L</span>
+      </div>
+      <div class="file-item" data-path="components/morocco-map.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> morocco-map.tsx
+        <span class="file-meta">167 L</span>
+      </div>
+      <div class="file-item" data-path="components/navbar.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> navbar.tsx
+        <span class="file-meta">165 L</span>
+      </div>
+      <div class="file-item" data-path="components/section-header.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> section-header.tsx
+        <span class="file-meta">86 L</span>
+      </div>
+      <div class="file-item" data-path="components/theme-provider.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> theme-provider.tsx
+        <span class="file-meta">11 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 ui</div>
+      <div class="file-item" data-path="components/ui/accordion.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> accordion.tsx
+        <span class="file-meta">58 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/alert-dialog.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> alert-dialog.tsx
+        <span class="file-meta">141 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/alert.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> alert.tsx
+        <span class="file-meta">59 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/aspect-ratio.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> aspect-ratio.tsx
+        <span class="file-meta">7 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/avatar.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> avatar.tsx
+        <span class="file-meta">50 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/badge.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> badge.tsx
+        <span class="file-meta">36 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/breadcrumb.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> breadcrumb.tsx
+        <span class="file-meta">115 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/button.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> button.tsx
+        <span class="file-meta">56 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/calendar.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> calendar.tsx
+        <span class="file-meta">66 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/card.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> card.tsx
+        <span class="file-meta">79 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/carousel.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> carousel.tsx
+        <span class="file-meta">262 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/chart.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> chart.tsx
+        <span class="file-meta">365 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/checkbox.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> checkbox.tsx
+        <span class="file-meta">30 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/collapsible.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> collapsible.tsx
+        <span class="file-meta">11 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/command.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> command.tsx
+        <span class="file-meta">153 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/context-menu.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> context-menu.tsx
+        <span class="file-meta">200 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/dialog.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> dialog.tsx
+        <span class="file-meta">122 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/drawer.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> drawer.tsx
+        <span class="file-meta">118 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/dropdown-menu.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> dropdown-menu.tsx
+        <span class="file-meta">200 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/form.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> form.tsx
+        <span class="file-meta">178 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/hover-card.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> hover-card.tsx
+        <span class="file-meta">29 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/input-otp.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> input-otp.tsx
+        <span class="file-meta">71 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/input.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> input.tsx
+        <span class="file-meta">22 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/label.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> label.tsx
+        <span class="file-meta">26 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/menubar.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> menubar.tsx
+        <span class="file-meta">236 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/navigation-menu.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> navigation-menu.tsx
+        <span class="file-meta">128 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/pagination.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> pagination.tsx
+        <span class="file-meta">117 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/popover.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> popover.tsx
+        <span class="file-meta">31 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/progress.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> progress.tsx
+        <span class="file-meta">28 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/radio-group.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> radio-group.tsx
+        <span class="file-meta">44 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/resizable.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> resizable.tsx
+        <span class="file-meta">45 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/scroll-area.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> scroll-area.tsx
+        <span class="file-meta">48 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/select.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> select.tsx
+        <span class="file-meta">160 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/separator.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> separator.tsx
+        <span class="file-meta">31 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/sheet.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> sheet.tsx
+        <span class="file-meta">140 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/sidebar.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> sidebar.tsx
+        <span class="file-meta">763 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/skeleton.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> skeleton.tsx
+        <span class="file-meta">15 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/slider.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> slider.tsx
+        <span class="file-meta">28 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/sonner.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> sonner.tsx
+        <span class="file-meta">31 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/switch.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> switch.tsx
+        <span class="file-meta">29 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/table.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> table.tsx
+        <span class="file-meta">117 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/tabs.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> tabs.tsx
+        <span class="file-meta">55 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/textarea.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> textarea.tsx
+        <span class="file-meta">22 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/toast.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> toast.tsx
+        <span class="file-meta">129 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/toaster.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> toaster.tsx
+        <span class="file-meta">35 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/toggle-group.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> toggle-group.tsx
+        <span class="file-meta">61 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/toggle.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> toggle.tsx
+        <span class="file-meta">45 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/tooltip.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> tooltip.tsx
+        <span class="file-meta">30 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/use-mobile.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> use-mobile.tsx
+        <span class="file-meta">19 L</span>
+      </div>
+      <div class="file-item" data-path="components/ui/use-toast.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> use-toast.ts
+        <span class="file-meta">194 L</span>
+      </div>
+      <div class="file-item" data-path="components.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> components.json
+        <span class="file-meta">21 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 hooks</div>
+      <div class="file-item" data-path="hooks/use-mobile.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> use-mobile.tsx
+        <span class="file-meta">19 L</span>
+      </div>
+      <div class="file-item" data-path="hooks/use-toast.ts" style="padding-left: 40px">
+        <span class="file-icon ts"></span> use-toast.ts
+        <span class="file-meta">194 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 lib</div>
+      <div class="file-item" data-path="lib/chatbot-knowledge.ts" style="padding-left: 40px">
+        <span class="file-icon ts"></span> chatbot-knowledge.ts
+        <span class="file-meta">90 L</span>
+      </div>
+      <div class="file-item" data-path="lib/utils.ts" style="padding-left: 40px">
+        <span class="file-icon ts"></span> utils.ts
+        <span class="file-meta">6 L</span>
+      </div>
+      <div class="file-item" data-path="next-env.d.ts" style="padding-left: 30px">
+        <span class="file-icon ts"></span> next-env.d.ts
+        <span class="file-meta">5 L</span>
+      </div>
+      <div class="file-item" data-path="next.config.mjs" style="padding-left: 30px">
+        <span class="file-icon js"></span> next.config.mjs
+        <span class="file-meta">14 L</span>
+      </div>
+      <div class="file-item" data-path="package-lock.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> package-lock.json
+        <span class="file-meta">4191 L</span>
+      </div>
+      <div class="file-item" data-path="package.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> package.json
+        <span class="file-meta">70 L</span>
+      </div>
+      <div class="file-item" data-path="pnpm-lock.yaml" style="padding-left: 30px">
+        <span class="file-icon json"></span> pnpm-lock.yaml
+        <span class="file-meta">3353 L</span>
+      </div>
+      <div class="file-item" data-path="pnpm-workspace.yaml" style="padding-left: 30px">
+        <span class="file-icon json"></span> pnpm-workspace.yaml
+        <span class="file-meta">2 L</span>
+      </div>
+      <div class="file-item" data-path="postcss.config.mjs" style="padding-left: 30px">
+        <span class="file-icon js"></span> postcss.config.mjs
+        <span class="file-meta">8 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 styles</div>
+      <div class="file-item" data-path="styles/globals.css" style="padding-left: 40px">
+        <span class="file-icon css"></span> globals.css
+        <span class="file-meta">94 L</span>
+      </div>
+      <div class="file-item" data-path="tailwind.config.ts" style="padding-left: 30px">
+        <span class="file-icon ts"></span> tailwind.config.ts
+        <span class="file-meta">204 L</span>
+      </div>
+      <div class="file-item" data-path="tsconfig.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> tsconfig.json
+        <span class="file-meta">27 L</span>
+      </div>
+
+    </div>
+    <div class="code-area">
+      <div class="welcome-screen" id="welcome">
+        <p>Sélectionnez un fichier pour voir le code source</p>
+      </div>
+      <div id="code-view" style="display:none;">
+        <div class="code-header">
+          <span class="filename" id="current-file"></span>
+        </div>
+        <pre><code id="code-content"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const basePath = '/projects/indh/site/';
+    
+    document.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('click', async () => {
+        document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const file = item.dataset.path;
+        let lang = 'javascript';
+        if(file.endsWith('.ts') || file.endsWith('.tsx')) lang = 'typescript';
+        else if(file.endsWith('.css')) lang = 'css';
+        else if(file.endsWith('.json')) lang = 'json';
+        else if(file.endsWith('.html')) lang = 'html';
+
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('code-view').style.display = 'block';
+        document.getElementById('current-file').textContent = file;
+        document.getElementById('code-content').textContent = 'Loading...';
+
+        try {
+          const res = await fetch(basePath + file);
+          const text = await res.text();
+          
+          const codeEl = document.getElementById('code-content');
+          codeEl.textContent = text;
+          codeEl.className = `language-${lang}`;
+          delete codeEl.dataset.highlighted;
+          hljs.highlightElement(codeEl);
+        } catch (err) {
+          document.getElementById('code-content').textContent = 'Erreur: ' + err.message;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

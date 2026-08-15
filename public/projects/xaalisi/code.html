@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XAALISI - Source Code Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; overflow: hidden; }
+    .top-bar { position: sticky; top: 0; z-index: 100; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+    .top-bar h1 { font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .top-bar .back-btn { padding: 8px 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #f8fafc; cursor: pointer; text-decoration: none; transition: all 0.2s; font-size: 0.85rem;}
+    .top-bar .back-btn:hover { background: rgba(255,255,255,0.1); }
+    .layout { display: flex; height: calc(100vh - 60px); }
+    .sidebar { width: 280px; min-width: 280px; background: #1e293b; border-right: 1px solid rgba(255,255,255,0.1); overflow-y: auto; padding: 15px 0; }
+    .sidebar-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #64748b; padding: 10px 20px 8px; font-weight: 600; }
+    .file-item { padding: 8px 20px 8px 30px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #cbd5e1; transition: all 0.15s; border-left: 3px solid transparent; }
+    .file-item:hover { background: rgba(255,255,255,0.05); color: #f8fafc; }
+    .file-item.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-left-color: #3b82f6; }
+    .file-icon { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .file-icon.html { background: #e44d26; }
+    .file-icon.js { background: #f7df1e; }
+    .file-icon.ts { background: #3178c6; }
+    .file-icon.css { background: #3b82f6; }
+    .file-icon.json { background: #8bc34a; }
+    .file-icon.default { background: #94a3b8; }
+    .file-meta { margin-left: auto; font-size: 0.65rem; color: #64748b; }
+    .folder-label { padding: 12px 20px 6px 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .code-area { flex: 1; overflow: auto; background: #0d1117; }
+    .code-header { position: sticky; top: 0; z-index: 10; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(8px); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+    .code-header .filename { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; }
+    pre { margin: 0; padding: 0; }
+    code.hljs { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; padding: 20px; background: transparent !important; }
+    .welcome-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #475569; gap: 15px; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="/" class="back-btn">← Portfolio</a>
+    <h1>XAALISI — Source Code</h1>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">Explorateur (Next.js)</div>
+      <div class="file-item" data-path=".env.example" style="padding-left: 30px">
+        <span class="file-icon default"></span> .env.example
+        <span class="file-meta">23 L</span>
+      </div>
+      <div class="file-item" data-path="DEPLOIEMENT_AZURE.md" style="padding-left: 30px">
+        <span class="file-icon md"></span> DEPLOIEMENT_AZURE.md
+        <span class="file-meta">70 L</span>
+      </div>
+      <div class="file-item" data-path="README.md" style="padding-left: 30px">
+        <span class="file-icon md"></span> README.md
+        <span class="file-meta">126 L</span>
+      </div>
+      <div class="file-item" data-path="app.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> app.json
+        <span class="file-meta">9 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 backend-core</div>
+      <div class="file-item" data-path="backend-core/.env.example" style="padding-left: 40px">
+        <span class="file-icon default"></span> .env.example
+        <span class="file-meta">5 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/RAPPORT_FINAL_XAALISI.md" style="padding-left: 40px">
+        <span class="file-icon md"></span> RAPPORT_FINAL_XAALISI.md
+        <span class="file-meta">46 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 alembic</div>
+      <div class="file-item" data-path="backend-core/alembic/env.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> env.py
+        <span class="file-meta">88 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 versions</div>
+      <div class="file-item" data-path="backend-core/alembic/versions/579ed43bda58_merge_heads.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> 579ed43bda58_merge_heads.py
+        <span class="file-meta">28 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/alembic/versions/aac17db9eeab_add_adminauditlog_table.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> aac17db9eeab_add_adminauditlog_table.py
+        <span class="file-meta">45 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/alembic/versions/afbadbdf96c0_add_security_and_kyc_attributes.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> afbadbdf96c0_add_security_and_kyc_attributes.py
+        <span class="file-meta">36 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/alembic/versions/b0193ab0c115_initial_migration.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> b0193ab0c115_initial_migration.py
+        <span class="file-meta">64 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/alembic/versions/b7c7517b0cd9_add_kyc_fields.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> b7c7517b0cd9_add_kyc_fields.py
+        <span class="file-meta">82 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/alembic/versions/c6b5c263b454_add_tontine_and_enterprise_models.py" style="padding-left: 60px">
+        <span class="file-icon py"></span> c6b5c263b454_add_tontine_and_enterprise_models.py
+        <span class="file-meta">95 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/auth.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> auth.py
+        <span class="file-meta">66 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/config.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> config.py
+        <span class="file-meta">14 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 database</div>
+      <div class="file-item" data-path="backend-core/database/__init__.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> __init__.py
+        <span class="file-meta">2 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/database/database.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> database.py
+        <span class="file-meta">24 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/database/models.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> models.py
+        <span class="file-meta">328 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/dependencies.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> dependencies.py
+        <span class="file-meta">40 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/fraud_engine.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> fraud_engine.py
+        <span class="file-meta">47 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/ledger.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> ledger.py
+        <span class="file-meta">189 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/limiter.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> limiter.py
+        <span class="file-meta">4 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 middleware</div>
+      <div class="file-item" data-path="backend-core/middleware/__init__.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> __init__.py
+        <span class="file-meta">1 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/middleware/api_logger.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> api_logger.py
+        <span class="file-meta">70 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 providers</div>
+      <div class="file-item" data-path="backend-core/providers/base.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> base.py
+        <span class="file-meta">23 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/providers/orange_money.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> orange_money.py
+        <span class="file-meta">41 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 routers</div>
+      <div class="file-item" data-path="backend-core/routers/__init__.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> __init__.py
+        <span class="file-meta">1 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/admin_dashboard_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> admin_dashboard_router.py
+        <span class="file-meta">146 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/admin_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> admin_router.py
+        <span class="file-meta">223 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/ai_bot_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> ai_bot_router.py
+        <span class="file-meta">100 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/api_analytics_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> api_analytics_router.py
+        <span class="file-meta">130 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/auth_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> auth_router.py
+        <span class="file-meta">236 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/banking_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> banking_router.py
+        <span class="file-meta">211 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/beneficiaries_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> beneficiaries_router.py
+        <span class="file-meta">56 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/cards_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> cards_router.py
+        <span class="file-meta">247 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/cbs_integration_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> cbs_integration_router.py
+        <span class="file-meta">71 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/cheques_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> cheques_router.py
+        <span class="file-meta">58 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/commission_engine_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> commission_engine_router.py
+        <span class="file-meta">132 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/crm_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> crm_router.py
+        <span class="file-meta">53 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/entreprise_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> entreprise_router.py
+        <span class="file-meta">103 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/integrations_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> integrations_router.py
+        <span class="file-meta">127 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/kyc_ocr_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> kyc_ocr_router.py
+        <span class="file-meta">62 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/kyc_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> kyc_router.py
+        <span class="file-meta">59 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/merchant_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> merchant_router.py
+        <span class="file-meta">153 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/notifications_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> notifications_router.py
+        <span class="file-meta">88 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/open_banking_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> open_banking_router.py
+        <span class="file-meta">83 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/regulatory_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> regulatory_router.py
+        <span class="file-meta">35 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/scheduled_payments_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> scheduled_payments_router.py
+        <span class="file-meta">136 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/sms_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> sms_router.py
+        <span class="file-meta">114 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/statements_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> statements_router.py
+        <span class="file-meta">169 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/tontine_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> tontine_router.py
+        <span class="file-meta">243 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/transactions_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> transactions_router.py
+        <span class="file-meta">530 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/ussd_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> ussd_router.py
+        <span class="file-meta">152 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/wallet_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> wallet_router.py
+        <span class="file-meta">27 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/webhooks_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> webhooks_router.py
+        <span class="file-meta">106 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/workflow_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> workflow_router.py
+        <span class="file-meta">88 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/routers/ws_router.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> ws_router.py
+        <span class="file-meta">21 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/schemas.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> schemas.py
+        <span class="file-meta">123 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 scripts</div>
+      <div class="file-item" data-path="backend-core/scripts/anonymize_pii.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> anonymize_pii.py
+        <span class="file-meta">80 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/scripts/create_super_admin.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> create_super_admin.py
+        <span class="file-meta">41 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/scripts/set_user_role.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> set_user_role.py
+        <span class="file-meta">43 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/server.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> server.py
+        <span class="file-meta">105 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 tests</div>
+      <div class="file-item" data-path="backend-core/tests/__init__.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> __init__.py
+        <span class="file-meta">1 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/conftest.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> conftest.py
+        <span class="file-meta">35 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/test_audit_fixes.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> test_audit_fixes.py
+        <span class="file-meta">163 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/test_auth.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> test_auth.py
+        <span class="file-meta">37 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/test_complete_platform.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> test_complete_platform.py
+        <span class="file-meta">201 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/test_enterprise_features.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> test_enterprise_features.py
+        <span class="file-meta">224 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/tests/test_transactions.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> test_transactions.py
+        <span class="file-meta">31 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/transactions.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> transactions.py
+        <span class="file-meta">139 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 utils</div>
+      <div class="file-item" data-path="backend-core/utils/cards.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> cards.py
+        <span class="file-meta">52 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/utils/fraud_ai.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> fraud_ai.py
+        <span class="file-meta">41 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/utils/iban.py" style="padding-left: 50px">
+        <span class="file-icon py"></span> iban.py
+        <span class="file-meta">19 L</span>
+      </div>
+      <div class="file-item" data-path="backend-core/websocket_manager.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> websocket_manager.py
+        <span class="file-meta">30 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 database</div>
+      <div class="file-item" data-path="database/redis_cache.py" style="padding-left: 40px">
+        <span class="file-icon py"></span> redis_cache.py
+        <span class="file-meta">17 L</span>
+      </div>
+      <div class="file-item" data-path="eas.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> eas.json
+        <span class="file-meta">27 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 frontend-mobile</div>
+      <div class="file-item" data-path="frontend-mobile/App.tsx" style="padding-left: 40px">
+        <span class="file-icon ts"></span> App.tsx
+        <span class="file-meta">42 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/README.md" style="padding-left: 40px">
+        <span class="file-icon md"></span> README.md
+        <span class="file-meta">50 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 app</div>
+      <div class="folder-label" style="padding-left: 40px">📁 (tabs)</div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/_layout.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> _layout.tsx
+        <span class="file-meta">212 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/account.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> account.tsx
+        <span class="file-meta">322 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/agent.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> agent.tsx
+        <span class="file-meta">363 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/index.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> index.tsx
+        <span class="file-meta">948 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/payments.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> payments.tsx
+        <span class="file-meta">593 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/(tabs)/transfers.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> transfers.tsx
+        <span class="file-meta">810 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/_layout.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> _layout.tsx
+        <span class="file-meta">149 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/auth.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> auth.tsx
+        <span class="file-meta">860 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/cards.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> cards.tsx
+        <span class="file-meta">692 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/change-pin.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> change-pin.tsx
+        <span class="file-meta">158 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/cheques.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> cheques.tsx
+        <span class="file-meta">338 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/factures.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> factures.tsx
+        <span class="file-meta">609 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/help.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> help.tsx
+        <span class="file-meta">226 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/history.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> history.tsx
+        <span class="file-meta">159 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/id-upload.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> id-upload.tsx
+        <span class="file-meta">589 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/index.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> index.tsx
+        <span class="file-meta">244 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/kyc.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> kyc.tsx
+        <span class="file-meta">417 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/limits.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> limits.tsx
+        <span class="file-meta">130 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/menu.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> menu.tsx
+        <span class="file-meta">190 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 merchant</div>
+      <div class="file-item" data-path="frontend-mobile/app/merchant/pos.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> pos.tsx
+        <span class="file-meta">231 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/merchant.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> merchant.tsx
+        <span class="file-meta">315 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/modal.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> modal.tsx
+        <span class="file-meta">29 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/notifications.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> notifications.tsx
+        <span class="file-meta">174 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/scan.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> scan.tsx
+        <span class="file-meta">202 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/settings.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> settings.tsx
+        <span class="file-meta">156 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/statements.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> statements.tsx
+        <span class="file-meta">144 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/success.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> success.tsx
+        <span class="file-meta">217 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/support-chat.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> support-chat.tsx
+        <span class="file-meta">201 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/support.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> support.tsx
+        <span class="file-meta">239 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/terms.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> terms.tsx
+        <span class="file-meta">90 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/tontines.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> tontines.tsx
+        <span class="file-meta">290 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/ussd.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> ussd.tsx
+        <span class="file-meta">146 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app/welcome.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> welcome.tsx
+        <span class="file-meta">64 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/app.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> app.json
+        <span class="file-meta">75 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/babel.config.js" style="padding-left: 40px">
+        <span class="file-icon js"></span> babel.config.js
+        <span class="file-meta">9 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 components</div>
+      <div class="file-item" data-path="frontend-mobile/components/AppAlert.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> AppAlert.tsx
+        <span class="file-meta">161 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/external-link.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> external-link.tsx
+        <span class="file-meta">25 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/haptic-tab.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> haptic-tab.tsx
+        <span class="file-meta">18 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/hello-wave.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> hello-wave.tsx
+        <span class="file-meta">19 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/parallax-scroll-view.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> parallax-scroll-view.tsx
+        <span class="file-meta">79 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/themed-text.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> themed-text.tsx
+        <span class="file-meta">60 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/themed-view.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> themed-view.tsx
+        <span class="file-meta">14 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 ui</div>
+      <div class="file-item" data-path="frontend-mobile/components/ui/collapsible.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> collapsible.tsx
+        <span class="file-meta">45 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/ui/icon-symbol.ios.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> icon-symbol.ios.tsx
+        <span class="file-meta">32 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/components/ui/icon-symbol.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> icon-symbol.tsx
+        <span class="file-meta">41 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 config</div>
+      <div class="file-item" data-path="frontend-mobile/config/api.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> api.ts
+        <span class="file-meta">52 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/config/i18n.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> i18n.ts
+        <span class="file-meta">23 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/config/storage.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> storage.ts
+        <span class="file-meta">40 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 constants</div>
+      <div class="file-item" data-path="frontend-mobile/constants/theme.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> theme.ts
+        <span class="file-meta">53 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 context</div>
+      <div class="file-item" data-path="frontend-mobile/context/AuthContext.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> AuthContext.tsx
+        <span class="file-meta">74 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/context/NetworkContext.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> NetworkContext.tsx
+        <span class="file-meta">25 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/context/ThemeContext.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> ThemeContext.tsx
+        <span class="file-meta">85 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/context/WalletContext.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> WalletContext.tsx
+        <span class="file-meta">794 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/context/WebSocketContext.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> WebSocketContext.tsx
+        <span class="file-meta">76 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/eas.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> eas.json
+        <span class="file-meta">21 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/eslint.config.js" style="padding-left: 40px">
+        <span class="file-icon js"></span> eslint.config.js
+        <span class="file-meta">10 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/eslint_report.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> eslint_report.json
+        <span class="file-meta">1 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 hooks</div>
+      <div class="file-item" data-path="frontend-mobile/hooks/use-color-scheme.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> use-color-scheme.ts
+        <span class="file-meta">1 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/hooks/use-color-scheme.web.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> use-color-scheme.web.ts
+        <span class="file-meta">21 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/hooks/use-theme-color.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> use-theme-color.ts
+        <span class="file-meta">16 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/hooks/useAppAlert.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> useAppAlert.ts
+        <span class="file-meta">46 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/hooks/useCeilingCheck.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> useCeilingCheck.ts
+        <span class="file-meta">78 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 locales</div>
+      <div class="file-item" data-path="frontend-mobile/locales/en.json" style="padding-left: 50px">
+        <span class="file-icon json"></span> en.json
+        <span class="file-meta">218 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/locales/fr.json" style="padding-left: 50px">
+        <span class="file-icon json"></span> fr.json
+        <span class="file-meta">218 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/package.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> package.json
+        <span class="file-meta">73 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 scripts</div>
+      <div class="file-item" data-path="frontend-mobile/scripts/reset-project.js" style="padding-left: 50px">
+        <span class="file-icon js"></span> reset-project.js
+        <span class="file-meta">112 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-mobile/tsconfig.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> tsconfig.json
+        <span class="file-meta">15 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 20px">📁 frontend-web</div>
+      <div class="file-item" data-path="frontend-web/README.md" style="padding-left: 40px">
+        <span class="file-icon md"></span> README.md
+        <span class="file-meta">73 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/eslint.config.js" style="padding-left: 40px">
+        <span class="file-icon js"></span> eslint.config.js
+        <span class="file-meta">29 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/index.html" style="padding-left: 40px">
+        <span class="file-icon html"></span> index.html
+        <span class="file-meta">13 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/package.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> package.json
+        <span class="file-meta">34 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 30px">📁 src</div>
+      <div class="file-item" data-path="frontend-web/src/App.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> App.tsx
+        <span class="file-meta">110 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 components</div>
+      <div class="file-item" data-path="frontend-web/src/components/Layout.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Layout.tsx
+        <span class="file-meta">122 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 context</div>
+      <div class="file-item" data-path="frontend-web/src/context/AuthContext.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> AuthContext.tsx
+        <span class="file-meta">71 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/context/WebSocketContext.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> WebSocketContext.tsx
+        <span class="file-meta">76 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/i18n.ts" style="padding-left: 50px">
+        <span class="file-icon ts"></span> i18n.ts
+        <span class="file-meta">88 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/index.css" style="padding-left: 50px">
+        <span class="file-icon css"></span> index.css
+        <span class="file-meta">297 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/main.tsx" style="padding-left: 50px">
+        <span class="file-icon ts"></span> main.tsx
+        <span class="file-meta">10 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 pages</div>
+      <div class="file-item" data-path="frontend-web/src/pages/AIChat.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> AIChat.tsx
+        <span class="file-meta">128 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/AdminDashboard.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> AdminDashboard.tsx
+        <span class="file-meta">164 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Beneficiaries.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Beneficiaries.tsx
+        <span class="file-meta">140 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Cards.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Cards.tsx
+        <span class="file-meta">390 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Dashboard.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Dashboard.tsx
+        <span class="file-meta">496 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Developer.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Developer.tsx
+        <span class="file-meta">140 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/History.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> History.tsx
+        <span class="file-meta">126 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Landing.css" style="padding-left: 60px">
+        <span class="file-icon css"></span> Landing.css
+        <span class="file-meta">2468 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Landing.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Landing.tsx
+        <span class="file-meta">826 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Limits.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Limits.tsx
+        <span class="file-meta">143 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Login.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Login.tsx
+        <span class="file-meta">105 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Notifications.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Notifications.tsx
+        <span class="file-meta">153 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/PayBills.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> PayBills.tsx
+        <span class="file-meta">342 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Security.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Security.tsx
+        <span class="file-meta">145 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Signup.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Signup.tsx
+        <span class="file-meta">93 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Statements.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Statements.tsx
+        <span class="file-meta">111 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Support.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Support.tsx
+        <span class="file-meta">175 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Tontines.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Tontines.tsx
+        <span class="file-meta">256 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Transfer.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Transfer.tsx
+        <span class="file-meta">328 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/src/pages/Workflows.tsx" style="padding-left: 60px">
+        <span class="file-icon ts"></span> Workflows.tsx
+        <span class="file-meta">167 L</span>
+      </div>
+      <div class="folder-label" style="padding-left: 40px">📁 services</div>
+      <div class="file-item" data-path="frontend-web/src/services/api.ts" style="padding-left: 60px">
+        <span class="file-icon ts"></span> api.ts
+        <span class="file-meta">37 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/tsconfig.app.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> tsconfig.app.json
+        <span class="file-meta">25 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/tsconfig.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> tsconfig.json
+        <span class="file-meta">7 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/tsconfig.node.json" style="padding-left: 40px">
+        <span class="file-icon json"></span> tsconfig.node.json
+        <span class="file-meta">24 L</span>
+      </div>
+      <div class="file-item" data-path="frontend-web/vite.config.ts" style="padding-left: 40px">
+        <span class="file-icon ts"></span> vite.config.ts
+        <span class="file-meta">7 L</span>
+      </div>
+      <div class="file-item" data-path="package.json" style="padding-left: 30px">
+        <span class="file-icon json"></span> package.json
+        <span class="file-meta">4 L</span>
+      </div>
+
+    </div>
+    <div class="code-area">
+      <div class="welcome-screen" id="welcome">
+        <p>Sélectionnez un fichier pour voir le code source</p>
+      </div>
+      <div id="code-view" style="display:none;">
+        <div class="code-header">
+          <span class="filename" id="current-file"></span>
+        </div>
+        <pre><code id="code-content"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const basePath = '/projects/xaalisi/code/';
+    
+    document.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('click', async () => {
+        document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const file = item.dataset.path;
+        let lang = 'javascript';
+        if(file.endsWith('.ts') || file.endsWith('.tsx')) lang = 'typescript';
+        else if(file.endsWith('.css')) lang = 'css';
+        else if(file.endsWith('.json')) lang = 'json';
+        else if(file.endsWith('.html')) lang = 'html';
+        else if(file.endsWith('.py')) lang = 'python';
+        else if(file.endsWith('.md')) lang = 'markdown';
+
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('code-view').style.display = 'block';
+        document.getElementById('current-file').textContent = file;
+        document.getElementById('code-content').textContent = 'Loading...';
+
+        try {
+          const res = await fetch(basePath + file);
+          const text = await res.text();
+          
+          const codeEl = document.getElementById('code-content');
+          codeEl.textContent = text;
+          codeEl.className = `language-${lang}`;
+          delete codeEl.dataset.highlighted;
+          hljs.highlightElement(codeEl);
+        } catch (err) {
+          document.getElementById('code-content').textContent = 'Erreur: ' + err.message;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

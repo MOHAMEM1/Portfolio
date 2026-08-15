@@ -1,0 +1,75 @@
+{
+  "expo": {
+    "name": "XAALISI",
+    "slug": "xaalisi",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/LOGO.png",
+    "scheme": "xaalisimobile",
+    "userInterfaceStyle": "automatic",
+    "jsEngine": "hermes",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0D0D0D",
+        "foregroundImage": "./assets/images/LOGO.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.mohamedm1steam.xaalisi",
+      "usesCleartextTraffic": true
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "experiments": {
+      "typedRoutes": false,
+      "reactCompiler": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "91a80af5-a602-4ad1-a22b-222569e71e5d"
+      }
+    },
+    "owner": "mohamedm1s-team",
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          },
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Autoriser XAALISI à utiliser l'appareil photo pour vérifier votre identité."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Autoriser XAALISI à accéder à vos photos pour télécharger votre pièce d'identité.",
+          "cameraPermission": "Autoriser XAALISI à utiliser l'appareil photo pour vérifier votre identité."
+        }
+      ],
+      "expo-document-picker"
+    ],
+    "splash": {
+      "image": "./assets/images/LOGO.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0D0D0D"
+    }
+  }
+}

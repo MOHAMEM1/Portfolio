@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDANOW - Source Code Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .top-bar h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .top-bar .stats {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .top-bar .back-btn {
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #f8fafc;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .top-bar .back-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .layout {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: #1e293b;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
+      padding: 15px 0;
+    }
+
+    .sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #64748b;
+      padding: 10px 20px 8px;
+      font-weight: 600;
+    }
+
+    .file-item {
+      padding: 10px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .file-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: #f8fafc;
+    }
+
+    .file-item.active {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      border-left-color: #3b82f6;
+    }
+
+    .file-icon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .file-icon.html { background: #e44d26; }
+    .file-icon.js { background: #f7df1e; }
+    .file-icon.css { background: #3b82f6; }
+
+    .file-meta {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: #475569;
+    }
+
+    .folder-label {
+      padding: 12px 20px 6px;
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .folder-label svg {
+      width: 14px;
+      height: 14px;
+      color: #64748b;
+    }
+
+    /* Code Area */
+    .code-area {
+      flex: 1;
+      overflow: auto;
+      background: #0d1117;
+    }
+
+    .code-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .code-header .filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+    }
+
+    .code-header .fileinfo {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    pre {
+      margin: 0;
+      padding: 0;
+    }
+
+    code.hljs {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      padding: 20px;
+      background: transparent !important;
+    }
+
+    .line-numbers {
+      counter-reset: line;
+    }
+
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #475569;
+      gap: 15px;
+    }
+
+    .welcome-screen .icon {
+      opacity: 0.3;
+    }
+
+    .welcome-screen .icon svg {
+      width: 64px;
+      height: 64px;
+    }
+
+    .welcome-screen p {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 200px; min-width: 200px; }
+      .file-meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="/" class="back-btn">← Portfolio</a>
+    <h1>BDANOW — Source Code</h1>
+    <div class="stats">11 fichiers · 9,469 lignes · 355 Ko</div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">Explorateur</div>
+
+      <div class="folder-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg> Root</div>
+      <div class="file-item" data-file="index.html" data-lang="html">
+        <span class="file-icon html"></span> index.html
+        <span class="file-meta">618 L</span>
+      </div>
+      <div class="file-item" data-file="dashboard.html" data-lang="html">
+        <span class="file-icon html"></span> dashboard.html
+        <span class="file-meta">926 L</span>
+      </div>
+      <div class="file-item" data-file="pay.html" data-lang="html">
+        <span class="file-icon html"></span> pay.html
+        <span class="file-meta">194 L</span>
+      </div>
+
+      <div class="folder-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg> js/</div>
+      <div class="file-item" data-file="js/main.js" data-lang="javascript">
+        <span class="file-icon js"></span> main.js
+        <span class="file-meta">1,642 L</span>
+      </div>
+      <div class="file-item" data-file="js/app.js" data-lang="javascript">
+        <span class="file-icon js"></span> app.js
+        <span class="file-meta">1,109 L</span>
+      </div>
+      <div class="file-item" data-file="js/data.js" data-lang="javascript">
+        <span class="file-icon js"></span> data.js
+        <span class="file-meta">423 L</span>
+      </div>
+      <div class="file-item" data-file="js/pay.js" data-lang="javascript">
+        <span class="file-icon js"></span> pay.js
+        <span class="file-meta">426 L</span>
+      </div>
+
+      <div class="folder-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg> css/</div>
+      <div class="file-item" data-file="css/variables.css" data-lang="css">
+        <span class="file-icon css"></span> variables.css
+        <span class="file-meta">145 L</span>
+      </div>
+      <div class="file-item" data-file="css/styles.css" data-lang="css">
+        <span class="file-icon css"></span> styles.css
+        <span class="file-meta">2,116 L</span>
+      </div>
+      <div class="file-item" data-file="css/main.css" data-lang="css">
+        <span class="file-icon css"></span> main.css
+        <span class="file-meta">1,629 L</span>
+      </div>
+      <div class="file-item" data-file="css/pay.css" data-lang="css">
+        <span class="file-icon css"></span> pay.css
+        <span class="file-meta">341 L</span>
+      </div>
+    </div>
+
+    <div class="code-area">
+      <div class="welcome-screen" id="welcome">
+        <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <p>Sélectionnez un fichier pour voir le code source</p>
+      </div>
+      <div id="code-view" style="display:none;">
+        <div class="code-header">
+          <span class="filename" id="current-file"></span>
+          <span class="fileinfo" id="current-info"></span>
+        </div>
+        <pre><code id="code-content"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const basePath = '/projects/bdanow/';
+    
+    document.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('click', async () => {
+        // Update active state
+        document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const file = item.dataset.file;
+        const lang = item.dataset.lang;
+
+        // Show loading
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('code-view').style.display = 'block';
+        document.getElementById('current-file').textContent = file;
+        document.getElementById('code-content').textContent = 'Loading...';
+
+        try {
+          const res = await fetch(basePath + file);
+          const text = await res.text();
+          
+          const codeEl = document.getElementById('code-content');
+          codeEl.textContent = text;
+          codeEl.className = `language-${lang}`;
+          delete codeEl.dataset.highlighted; // FIX for syntax highlighting on click
+          hljs.highlightElement(codeEl);
+
+          const lines = text.split('\n').length;
+          const size = new Blob([text]).size;
+          document.getElementById('current-info').textContent = 
+            `${lines} lignes · ${(size / 1024).toFixed(1)} Ko`;
+        } catch (err) {
+          document.getElementById('code-content').textContent = 'Erreur de chargement: ' + err.message;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

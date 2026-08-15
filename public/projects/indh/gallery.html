@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet Web INDH - Équipe IMPACT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .back-btn {
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #f8fafc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.1); }
+    .title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .header p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+    .img-container {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .img-container:hover img {
+      transform: scale(1.03);
+    }
+    .site-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      border: 2px dashed rgba(59, 130, 246, 0.4);
+      border-radius: 12px;
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      min-height: 250px;
+    }
+    .site-link:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      border-color: #3b82f6;
+      transform: scale(1.02);
+    }
+    .site-link .icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 768px) {
+      .gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="/" class="back-btn">← Portfolio</a>
+    <div class="title">Projet Web INDH (1er Prix)</div>
+  </div>
+  <div class="container">
+    <div class="header">
+      <h1>Compétition Nationale INDH - 20 Ans</h1>
+      <p>L'équipe IMPACT a remporté la <strong>1ère place</strong> à la compétition nationale pour les 20 ans de l'INDH (Initiative Nationale pour le Développement Humain). Nous avons développé un site web interactif mettant en valeur les actions de l'INDH, permettant aux citoyens de découvrir ses programmes. Projet encadré par Web4Jobs et présenté devant un jury à Témara.</p>
+    </div>
+    <div class="gallery">
+      <div class="img-container"><img src="img2.png" alt="Soutenance"></div>
+      <div class="img-container"><img src="img3.png" alt="Présentation"></div>
+      <div class="img-container"><img src="img1.png" alt="Équipe IMPACT"></div>
+      <a href="/projects/indh/site_live/index.html" target="_blank" class="site-link">
+        <div class="icon">↗</div>
+        <div>Visiter la plateforme INDH</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

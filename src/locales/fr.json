@@ -1,0 +1,154 @@
+{
+  "translation": {
+    "nav": {
+      "home": "Accueil",
+      "about": "À Propos",
+      "experience": "Parcours",
+      "projects": "Projets",
+      "contact": "Contact"
+    },
+    "hero": {
+      "name": "Mohamed El Mahfoudi",
+      "degree": "Licence en Marketing & Transformation Digitale à l'Université Mohammed V",
+      "role": "Développeur Web Full Stack & Backend (MERN Stack)",
+      "cta": "Voir mon travail"
+    },
+    "about": {
+      "title": "À Propos de Moi",
+      "description": "Développeur Full-Stack & Profil polyvalent doté d'une double compétence technique (Architecture Logicielle, Mobile/Web) et stratégique (Marketing et Transformation Digitale). Capable de concevoir des solutions robustes (Monorepo, Fintech) tout en comprenant les enjeux business. Rigoureux, esprit d'équipe et adaptable, je suis à la recherche de nouvelles opportunités pour apporter des solutions innovantes.",
+      "skillsTitle": "Compétences Techniques",
+      "skills": {
+        "backend": {
+          "title": "Back-end, Data & IA",
+          "items": ["Python", "FastAPI", "Node.js", "Express", "PostgreSQL (Alembic)", "Redis", "Intégration IA", "OCR (KYC)"]
+        },
+        "frontend": {
+          "title": "Front-end & Mobile",
+          "items": ["React Native (Expo)", "React.js", "TypeScript", "UI/UX (Reanimated 3, Tailwind)", "WebSockets"]
+        },
+        "devops": {
+          "title": "DevOps & Architecture",
+          "items": ["Git & GitHub", "Docker", "Architecture Monorepo", "Microservices", "API RESTful"]
+        },
+        "business": {
+          "title": "Business & Management",
+          "items": ["Stratégies Marketing Digital", "Agile/Scrum", "E-commerce", "Fintech Ledger"]
+        }
+      }
+    },
+    "experience": {
+      "title": "Parcours : Expériences & Formations",
+      "jobsTitle": "Expériences Professionnelles",
+      "eduTitle": "Formations & Certifications",
+      "jobs": [
+        {
+          "role": "Lead Développeur Full-Stack (Stage Rémunéré)",
+          "company": "FAMIB Group (Mali - À distance)",
+          "period": "Mars 2026 - Août 2026 (6 mois)",
+          "description": "Développement du cœur d'une néo-banque nationale (Monorepo, FastAPI, PostgreSQL). Création d'un moteur financier sécurisé, App Mobile (React Native) et portail d'administration connectés en temps réel avec intégration KYC par OCR."
+        },
+        {
+          "role": "Agent Service Client & Gestionnaire d'Agence",
+          "company": "Cash Plus, Témara",
+          "period": "Juil. 2025 - Nov. 2025 (5 mois)",
+          "description": "Gestion des flux financiers, transferts d'argent nationaux et internationaux, ouverture des comptes, et respect strict des procédures internes de sécurité AML. Conseil personnalisé pour améliorer l'expérience client."
+        },
+        {
+          "role": "Vendeur (Rayon Jardin)",
+          "company": "Mr. Bricolage, Témara",
+          "period": "Avril 2024 - Sept. 2024 (6 mois)",
+          "description": "Conseil client et accompagnement efficace tout en atteignant des objectifs de vente ambitieux grâce à des techniques de persuasion et gestion de la relation client."
+        },
+        {
+          "role": "Animateur Commercial",
+          "company": "Godwin électroménager (Carrefour)",
+          "period": "Déc. 2023 - Févr. 2024 (3 mois)",
+          "description": "Accueil, conseil et persuasion des clients. Développement des compétences en vente et en communication tout en assurant une excellente représentation de la marque."
+        }
+      ],
+      "education": [
+        {
+          "degree": "Licence Marketing et Transformation Digitale",
+          "school": "Univ. Mohammed V (FSJES), Rabat",
+          "period": "Septembre 2023 - Août 2026",
+          "description": "Modules : E-Marketing, Intelligence Artificielle, Business Intelligence, Big Data, Management Stratégique et Gestion de Projets Digitaux."
+        },
+        {
+          "degree": "Certification Web Developer (Full Stack MERN)",
+          "school": "Centre Web4Jobs",
+          "period": "Mars 2025 - Août 2026 (18 mois)",
+          "description": "Formation intensive axée sur la pratique : Responsive Web Design, Front-End (React, Redux), Back-End & APIs (Node.js, Express, MongoDB) et défis algorithmiques."
+        },
+        {
+          "degree": "Certifications ICT & Algorithmique",
+          "school": "Huawei ICT Academy",
+          "period": "Sept. 2025 - Févr. 2026",
+          "description": "Certifications officielles : Overview of AI & Algorithms et Algorithm and Program Design."
+        },
+        {
+          "degree": "Formation Développement Personnel & RH",
+          "school": "Fondation Wasl Wa Idmaj",
+          "period": "Octobre 2023 - Avril 2024 (6 mois)",
+          "description": "Ateliers d'accompagnement RH, développement personnel et initiation au lancement de projet personnel."
+        },
+        {
+          "degree": "Baccalauréat Sciences Physiques (Option Français)",
+          "school": "Lycée Nassim, Témara",
+          "period": "2022",
+          "description": "Obtention du baccalauréat en sciences physiques."
+        }
+      ]
+    },
+    "projects": {
+      "title": "Projets Phares",
+      "xaalisi": {
+        "title": "Xaalisi - Infrastructure Financière & Néo-Banque Nationale",
+        "role": "Lead Développeur Full-Stack — XAALISI (Stage Rémunéré - FAMIB Group)",
+        "description": "Conception et développement from scratch d'une néo-banque nationale. En tant que Lead Développeur sur une période de 6 mois, j'ai architecturé et déployé une solution FinTech complète, sécurisée et scalable.<br/><br/><strong>Frontend & Mobile :</strong> Développement de l'interface d'administration Web et de l'application mobile cross-platform (React Native) avec une UX/UI optimisée pour la conversion.<br/><br/><strong>Backend & Core Banking :</strong> Mise en place d'une API RESTful (FastAPI) connectée à PostgreSQL. Conception d'un moteur de transactions ACID empêchant la double dépense via des clés d'idempotence.<br/><br/><strong>Features FinTech :</strong> Intégration de paiements multicanaux (USSD, Tontines, QR Code) et validation d'identité (KYC) par technologie OCR.<br/><br/><strong>Ops & Architecture :</strong> Gestion du cycle de vie logiciel via une architecture Monorepo et Microservices. Déploiement en production sur serveur cloud (Docker, Nginx, Let's Encrypt).",
+        "tags": ["Python", "FastAPI", "React Native", "PostgreSQL", "Docker", "Monorepo"],
+        "code": "Voir le Code",
+        "live": "Site Web",
+        "qr": "App Mobile (APK)"
+      },
+      "bdanow": {
+        "title": "BDANOW - Plateforme Web Centralisée",
+        "role": "Chef de Projet & Développeur Web Full-Stack",
+        "description": "<strong>Contexte Académique</strong><br/>Projet de fin d'études réalisé dans le cadre de ma Licence en Marketing & Transformation Digitale à la FSJES Souissi. Développé pour le module de Management et Marketing des Projets Digitaux, sous la supervision du professeur Mustapha ASBAI.<br/><br/><strong>Le Projet</strong><br/>BDANOW est un \"guichet unique\" digital conçu pour résoudre la fragmentation de l'information sur le marché de la formation au Maroc, en connectant directement les apprenants aux centres de formation.<br/><br/><strong>Mon Rôle : Chef de Projet & Développeur Web</strong><br/>Alliant mon profil hybride (Marketing / Dev), j'ai piloté ce projet de A à Z :<br/>- Management & Stratégie : Coordination d'une équipe de 9 personnes, rédaction du cahier des charges, création de l'identité visuelle et élaboration de la stratégie marketing.<br/>- Développement : Conception UI/UX, programmation de l'architecture front-end et déploiement de la plateforme.",
+        "tags": ["HTML/CSS/JS", "Netlify", "Marketing Digital", "Gestion de Projet", "UI/UX"],
+        "code": "Voir le Code",
+        "live": "Voir la Plateforme"
+      },
+      "web4job": {
+        "title": "Projets Web4Job",
+        "role": "Développeur Full Stack",
+        "description": "Collection de projets réalisés lors de ma spécialisation en développement Full Stack au sein du centre Web4Jobs. Ce programme intensif m'a permis de consolider mes compétences techniques sur la stack MERN (MongoDB, Express, React, Node.js) à travers des défis algorithmiques et des cas pratiques réels.",
+        "tags": ["MERN Stack", "JavaScript", "React"],
+        "code": "Voir le Code"
+      },
+      "wordpress": {
+        "title": "Shop Digital - Agence Digitale & E-commerce",
+        "role": "Développeur WordPress",
+        "description": "<strong>Description :</strong><br/>Conception et développement de bout en bout de \"Shop Digital\", un site web hybride combinant une vitrine d'agence digitale et une solution e-commerce (WooCommerce). Ce projet a été pensé pour offrir une expérience utilisateur (UX) fluide et optimiser la conversion des services digitaux en ligne.<br/><br/><strong>Fonctionnalités et réalisations clés :</strong><br/>- Développement d'une interface moderne, responsive et orientée utilisateur.<br/>- Intégration et configuration d'une boutique en ligne pour la vente de e-services.<br/>- Mise en place de formulaires de contact dynamiques pour la génération de leads.<br/>- Optimisation globale du site pour allier performance technique et objectifs de marketing digital.",
+        "tags": ["WordPress", "E-commerce", "Marketing Digital", "FSJES Souissi"],
+        "live": "Voir l'Attestation"
+      },
+      "indh": {
+        "title": "Projet Web INDH (1er Prix National)",
+        "role": "Développeur Full Stack (Équipe IMPACT)",
+        "description": "Conception et développement Full Stack d'une plateforme web interactive dédiée à la célébration des 20 ans de l'INDH. Ce projet, visant à vulgariser et orienter les citoyens vers les programmes sociaux, a été réalisé en équipe (IMPACT). Notre travail collaboratif et technique a été couronné par le 1er Prix lors de la compétition nationale organisée à Témara sous l'encadrement de Web4Jobs.",
+        "tags": ["Développement Web", "Impact Social", "Travail en Équipe", "Web4Jobs", "INDH"],
+        "live": "Voir la Plateforme",
+        "code": "Voir le Code"
+      }
+    },
+    "contact": {
+      "title": "Contactez-moi",
+      "description": "Je suis actuellement à l'écoute de nouvelles opportunités professionnelles. Qu'il s'agisse d'un projet de développement, d'une collaboration ou d'une simple question, n'hésitez pas à me contacter. Je vous répondrai dans les plus brefs délais.",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "footer": {
+      "builtWith": "Conçu & Développé par Mohamed El Mahfoudi."
+    }
+  }
+}
