@@ -22,6 +22,7 @@ const Projects = ({ t }) => {
       hasCode: true,
       hasVideo: true,
       videoUrl: '/projects/xaalisi/demo.html',
+      liveUrl: 'https://xaalisi.tech/',
       appUrl: 'https://expo.dev/accounts/mohamedm1s-team/projects/xaalisi/builds/b29257c8-8105-4119-b6f1-2a85f247d3de',
       codeUrl: '/projects/xaalisi/code.html',
       featured: true,
