@@ -18,9 +18,11 @@ const Projects = ({ t }) => {
     {
       id: 'xaalisi',
       tags: t('projects.xaalisi.tags', { returnObjects: true }),
+      hasLive: true,
       hasCode: true,
       hasVideo: true,
       videoUrl: '/projects/xaalisi/demo.html',
+      liveUrl: '/projects/xaalisi/site/index.html',
       appUrl: 'https://expo.dev/accounts/mohamedm1s-team/projects/xaalisi/builds/b29257c8-8105-4119-b6f1-2a85f247d3de',
       codeUrl: '/projects/xaalisi/code.html',
       featured: true,
