@@ -9,8 +9,8 @@ const Landing = () => {
     lucideScript.async = false;
     document.head.appendChild(lucideScript);
 
-    const script = document.createElement('script');
-    script.src = `/landing-script.js?v=${Date.now()}`;
+    const base = new URL('.', import.meta.url).pathname;
+    script.src = `${base}landing-script.js?v=${Date.now()}`;
     script.async = false;
     document.body.appendChild(script);
 
