@@ -6,13 +6,13 @@ const initialData = {
     'admin': { password: 'admin', name: 'Admin Xaalisi', role: 'ADMIN' }
   },
   wallets: [
-    { currency: 'XOF', balance: 540000.0, is_default: true, status: 'ACTIVE' },
-    { currency: 'EUR', balance: 150.0, is_default: false, status: 'ACTIVE' }
+    { id: 'acc-1', type: 'COURANT', currency: 'XOF', balance: 540000.0, is_default: true, status: 'ACTIVE' },
+    { id: 'acc-2', type: 'EPARGNE', currency: 'EUR', balance: 150.0, is_default: false, status: 'ACTIVE' }
   ],
   transactions: [
-    { id: 1, amount: -15000, type: 'TRANSFER', status: 'COMPLETED', created_at: new Date(Date.now() - 86400000).toISOString(), description: 'Transfert vers Alioune' },
-    { id: 2, amount: 50000, type: 'DEPOSIT', status: 'COMPLETED', created_at: new Date(Date.now() - 172800000).toISOString(), description: 'Recharge compte' },
-    { id: 3, amount: -5000, type: 'BILL_PAYMENT', status: 'COMPLETED', created_at: new Date(Date.now() - 259200000).toISOString(), description: 'Paiement Facture SENELEC' },
+    { id: 1, amount: -15000, transaction_type: 'TRANSFER', status: 'COMPLETED', created_at: new Date(Date.now() - 86400000).toISOString(), description: 'Transfert vers Alioune', receiver_id: 'Alioune' },
+    { id: 2, amount: 50000, transaction_type: 'DEPOSIT', status: 'COMPLETED', created_at: new Date(Date.now() - 172800000).toISOString(), description: 'Recharge compte', sender_id: 'System' },
+    { id: 3, amount: -5000, transaction_type: 'BILL_PAYMENT', status: 'COMPLETED', created_at: new Date(Date.now() - 259200000).toISOString(), description: 'Paiement Facture SENELEC' },
   ],
   cards: [
     { id: 1, card_number: '5432********1234', cardholder_name: 'SOULEYMANE DIALLO', expiry_month: 12, expiry_year: 2026, status: 'ACTIVE', daily_limit: 500000 }
@@ -26,16 +26,16 @@ const initialData = {
 };
 
 // Initialize LocalStorage if empty
-if (!localStorage.getItem('xaalisi_mock_db')) {
-  localStorage.setItem('xaalisi_mock_db', JSON.stringify(initialData));
+if (!localStorage.getItem('xaalisi_mock_db_v2')) {
+  localStorage.setItem('xaalisi_mock_db_v2', JSON.stringify(initialData));
 }
 
 function getDb() {
-  return JSON.parse(localStorage.getItem('xaalisi_mock_db') || '{}');
+  return JSON.parse(localStorage.getItem('xaalisi_mock_db_v2') || '{}');
 }
 
 function saveDb(db: any) {
-  localStorage.setItem('xaalisi_mock_db', JSON.stringify(db));
+  localStorage.setItem('xaalisi_mock_db_v2', JSON.stringify(db));
 }
 
 export async function handleMockRequest(endpoint: string, options: RequestInit) {
@@ -80,15 +80,15 @@ export async function handleMockRequest(endpoint: string, options: RequestInit) 
   if (endpoint.startsWith('/digital-banking/me/dashboard')) {
     if (!isLoggedIn) throw new Error('Unauthorized');
     return {
+      total_balance: db.wallets.reduce((acc: number, w: any) => acc + w.balance, 0),
+      accounts: db.wallets,
+      kyc_tier: 2,
       user: { username, kyc_status: 'VERIFIED', kyc_tier: 2, role: db.users[username]?.role || 'USER' },
-      wallets: db.wallets,
-      recent_transactions: db.transactions.slice(0, 5),
-      cards: db.cards
     };
   }
 
   if (endpoint.startsWith('/transactions/history')) {
-    return db.transactions;
+    return { transactions: db.transactions };
   }
   
   if (endpoint.startsWith('/transactions/transfer') && method === 'POST') {
