@@ -131,10 +131,39 @@ export async function handleMockRequest(endpoint: string, options: RequestInit) 
     if (method === 'GET') return db.notifications;
   }
   
-  if (endpoint.startsWith('/admin/stats/overview')) {
-    return { users: 1542, volume: 15000000, revenue: 150000, active_cards: 845 };
+  if (endpoint.startsWith('/transactions/transfer') && method === 'POST') {
+    return { message: "Transfert réussi (Mock)", transaction_id: "TX-" + Math.floor(Math.random()*10000) };
   }
 
+  // --- ARRAYS EXPECTED ---
+  if (endpoint.startsWith('/beneficiaries')) {
+    return db.beneficiaries || [];
+  }
+  
+  if (endpoint.startsWith('/workflows/pending')) {
+    return []; // Empty workflows for now
+  }
+  
+  if (endpoint.startsWith('/tontines')) {
+    return []; // Empty tontines for now
+  }
+  
+  if (endpoint.startsWith('/cards/virtual')) {
+    return { cards: db.cards || [] };
+  }
+  
+  if (endpoint.startsWith('/notifications')) {
+    return { notifications: db.notifications || [] };
+  }
+  
+  if (endpoint.startsWith('/admin/stats/transactions-by-type') || endpoint.startsWith('/admin/stats/daily-volume')) {
+    return [];
+  }
+  
+  if (endpoint.startsWith('/admin/stats/overview') || endpoint.startsWith('/admin/stats/kyc-compliance')) {
+    return {};
+  }
+  
   // Fallback for everything else
   return { message: 'Mock response ok', data: [] };
 }
