@@ -66,6 +66,13 @@ export async function handleMockRequest(endpoint: string, options: RequestInit) 
   }
   
   if (endpoint.startsWith('/auth/register') && method === 'POST') {
+    const body = JSON.parse(options.body as string || '{}');
+    const user = body.username || body.phone; // Assuming the username/phone is in the body
+    const pwd = body.password;
+    if (user && pwd) {
+      db.users[user] = { password: pwd, name: 'Nouvel Utilisateur', role: 'USER' };
+      saveDb(db);
+    }
     return { message: "Compte créé avec succès (Mock)" };
   }
   
