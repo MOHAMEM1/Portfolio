@@ -58,7 +58,7 @@ export async function handleMockRequest(endpoint: string, options: RequestInit) 
     const user = params.get('username');
     const pwd = params.get('password');
     
-    if (db.users[user as string] && db.users[user as string].password === pwd) {
+    if (db.users[user as string] && (db.users[user as string].password === pwd || db.users[user as string].pin === pwd)) {
       localStorage.setItem('username', user as string);
       return { access_token: `mock_token_${user}`, token_type: 'bearer' };
     }
@@ -69,8 +69,9 @@ export async function handleMockRequest(endpoint: string, options: RequestInit) 
     const body = JSON.parse(options.body as string || '{}');
     const user = body.username || body.phone; // Assuming the username/phone is in the body
     const pwd = body.password;
+    const pin = body.pin_code;
     if (user && pwd) {
-      db.users[user] = { password: pwd, name: 'Nouvel Utilisateur', role: 'USER' };
+      db.users[user] = { password: pwd, pin: pin, name: 'Nouvel Utilisateur', role: 'USER' };
       saveDb(db);
     }
     return { message: "Compte créé avec succès (Mock)" };
