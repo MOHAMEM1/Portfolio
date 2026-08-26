@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 if os.environ.get("VERCEL"):
     if not os.path.exists("/tmp/xaalisi.db"):
-        shutil.copy("xaalisi_backend/xaalisi.db", "/tmp/xaalisi.db")
+        shutil.copy("api/_xaalisi_backend/xaalisi.db", "/tmp/xaalisi.db")
     db_url = "sqlite:////tmp/xaalisi.db"
 else:
     db_url = "sqlite:///./xaalisi.db"

@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'xaalisi_backend')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '_xaalisi_backend')))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
